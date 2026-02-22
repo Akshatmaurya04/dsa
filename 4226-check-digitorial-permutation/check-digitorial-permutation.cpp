@@ -1,7 +1,7 @@
 class Solution {
 public:
-    bool digitorial(int a){
-        int temp = a;
+    bool isDigitorialPermutation(int n) {
+        int temp = n;
         int sum = 0;
         while(temp){
             int b = temp%10;
@@ -14,23 +14,11 @@ public:
             sum += result;
             temp /= 10;
         }
-        return sum == a;
-    }
-    bool isDigitorialPermutation(int n) {
-        bool flag = false;
-        // Convert to string to treat digits as elements
         string s = to_string(n);
-        
-        // Sort to start from the smallest permutation (123)
-        sort(s.begin(), s.end());
-        do { 
-            if(s[0] !='0' && digitorial(stoi(s))){
-                flag = true;
-                break;
-            }
-        } while (next_permutation(s.begin(), s.end()));
-
-        return flag;
-        
+        sort(s.begin(),s.end());
+        do{
+            if(s[0] != '0' && sum == stoi(s)) return true;
+        }while(next_permutation(s.begin(),s.end()));
+        return false;
     }
 };
