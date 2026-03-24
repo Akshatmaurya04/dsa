@@ -4,8 +4,8 @@ const int M = 12345;
     vector<vector<int>> constructProductMatrix(vector<vector<int>>& grid) {
         int n = grid.size();
         int m = grid[0].size();
-        long long product = 1;
-        long long prefix = 1;
+        int product = 1;
+        int prefix = 1;
         
         vector<vector<int>> suffix(n,vector<int>(m,1));
         for(int i = n-1; i >= 0; i--)
@@ -13,7 +13,6 @@ const int M = 12345;
             for(int j = m-1; j >= 0; j--){
                 suffix[i][j] = product;
                 product = (product * (grid[i][j]%M)) % M;
-                cout<<suffix[i][j]<<endl;
             }
         }
         
