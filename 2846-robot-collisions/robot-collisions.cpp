@@ -1,52 +1,51 @@
 class Solution {
 public:
-    using ti = tuple<int,int,char , int>;
+    using pi = pair<int,int>;
+    using pc = pair<char,int>;
+    using pic = pair<pi,pc>;
     vector<int> survivedRobotsHealths(vector<int>& positions, vector<int>& healths, string directions) {
-        vector<ti> arr;
-        int n = positions.size();
-
-        for(int i = 0; i < n; i++){
-            arr.push_back({positions[i],healths[i],directions[i] , i});
+        vector<pic> arr;
+        for(int i = 0; i < positions.size(); i++){
+            arr.push_back({{positions[i],healths[i]},{directions[i],i}});
         }
 
-        sort(arr.begin(),arr.end());
-        stack<ti>st;
+        sort(begin(arr),end(arr));
+        stack<pic> st;
+        for(auto& it: arr){
+            auto[pos, health] = it.first;
+            auto[dir, i] = it.second;
 
-        for(auto it : arr)
-        {
-            auto[pos , health , dir , i] = it;
-            while(!st.empty() and (get<2>(st.top()) == 'R' and dir == 'L'))
-            {
-                auto[tpos , thealth , tdir , tidx] = st.top();
+            while(!st.empty() and st.top().second.first == 'R' and dir == 'L'){
+                auto[tpos, thealth] = st.top().first;
+                auto[tdir, tidx] = st.top().second;
                 st.pop();
-
-                if(health == thealth)
-                {
+                
+                if(health == thealth){
                     health = 0;
                     break;
-                }
-                else if(thealth > health)
-                {
-                    thealth--;
-                    st.push({tpos , thealth , tdir , tidx});
+                }  
+                else if(thealth > health){
                     health = 0;
+                    thealth--;
+                    st.push({{tpos,thealth},{tdir,tidx}});
                     break;
                 }
                 else health--;
             }
-            if(health > 0) st.push({pos , health , dir, i});
+            if(health != 0) st.push({{pos, health},{dir, i}});
         }
-
-        vector<pair<int,int>>ans;
-        while(!st.empty())
-        {
-            ans.push_back({get<3>(st.top()) , get<1>(st.top())});
+        vector<pair<int,int>> ans;
+        while(!st.empty()){
+            auto[pos, health] = st.top().first;
+            auto[dir, i] = st.top().second;
             st.pop();
+            ans.push_back({i,health});
         }
-
-        sort(begin(ans) , end(ans));
+        sort(begin(ans),end(ans));
         vector<int>finalans;
-        for(auto it: ans) finalans.push_back(it.second);
+        for(auto it: ans){
+            finalans.push_back(it.second);
+        }
         return finalans;
     }
 };
