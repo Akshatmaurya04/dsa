@@ -1,31 +1,24 @@
 class Solution {
 public:
-    bool checkPalindrome(string& s, int i, int j){
-        while(i<=j){
-            if(s[i] != s[j]){
-                return false;
-            }
-            else {
-                i++;
-                j--;
-            }
+    string maxPalindrome(string& s, int l, int r, string& ans){
+        if(l < 0 || r >= s.size()) return ans;
+        if(s[l] == s[r]){
+            ans = (r-l+1 > ans.size()) ? s.substr(l,r-l+1) : ans;
+            return maxPalindrome(s,l-1,r+1,ans);
         }
-        return true;
+        return ans;
     }
+
     string longestPalindrome(string s) {
-        string t = "";
-        int n = s.size();
-        for(int i = 0 ; i < n ; i++){
-            int j = i;
-            while(j < s.size()){
-                if(checkPalindrome(s,i,j)){
-                    string str = s.substr(i,j-i+1);
-                    t = t.size() > str.size() ? t : str;
-                }
-                j++;
-            }
-            
+
+        string ans = "";
+        string temp = "";
+        for(int i = 0; i < s.size(); i++){
+            string odd = maxPalindrome(s,i,i,ans);
+            string even = maxPalindrome(s,i,i+1,ans);
+            temp = (odd.size() > even.size()) ? odd : even;
+            ans = (temp.size() > ans.size()) ? temp : ans;
         }
-        return t;
+        return ans;
     }
 };
