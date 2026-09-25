@@ -12,8 +12,7 @@ public:
                 if(mp[s[l]] == 0) mp.erase(s[l]);
                 l++;
             }
-            int len = mp.size();
-            maxi = max(maxi, len);
+            maxi = max(maxi, i-l+1);
         }
         return maxi;
     }
